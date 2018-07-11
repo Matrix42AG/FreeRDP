@@ -240,7 +240,11 @@ int xf_keyboard_read_keyboard_state(xfContext* xfc)
 		XQueryPointer(xfc->display, DefaultRootWindow(xfc->display),
 		              &wdummy, &wdummy, &dummy, &dummy, &dummy, &dummy, &state);
 	}
-
+	else
+	{
+		XQueryPointer(xfi->display, DefaultRootWindow(xfi->display),
+			&wdummy, &wdummy, &dummy, &dummy, &dummy, &dummy, &state);
+  	}
 	return state;
 }
 
