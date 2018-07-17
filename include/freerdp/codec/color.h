@@ -23,6 +23,7 @@
 #define FREERDP_CODEC_COLOR_H
 
 #include <freerdp/api.h>
+#include <freerdp/types.h>
 #include <winpr/wlog.h>
 #include <freerdp/log.h>
 #define CTAG FREERDP_TAG("codec.color")
