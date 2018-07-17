@@ -100,6 +100,16 @@ typedef struct gdi_palette gdiPalette;
 extern "C" {
 #endif
 
+struct _CLRCONV
+{
+	int alpha;
+	int invert;
+	int rgb555;
+	rdpPalette* palette;
+};
+typedef struct _CLRCONV CLRCONV;
+typedef CLRCONV* HCLRCONV;
+
 /* Compare two color formats but ignore differences in alpha channel.
  */
 static INLINE DWORD AreColorFormatsEqualNoAlpha(DWORD first, DWORD second)
