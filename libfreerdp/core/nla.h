@@ -77,6 +77,7 @@ struct rdp_nla
 	SecBufferDesc outputBufferDesc;
 	SecBuffer negoToken;
 	SecBuffer pubKeyAuth;
+	SecBuffer ClientNonce;
 	SecBuffer authInfo;
 	SecBuffer PublicKey;
 	SecBuffer tsCredentials;
@@ -85,6 +86,13 @@ struct rdp_nla
 	SEC_WINNT_AUTH_IDENTITY* identity;
 	PSecurityFunctionTable table;
 	SecPkgContext_Sizes ContextSizes;
+
+
+#if defined(UNICODE)
+	SEC_WCHAR* packageName;
+#else
+	SEC_CHAR* packageName;
+#endif
 };
 
 int nla_authenticate(rdpNla* nla);

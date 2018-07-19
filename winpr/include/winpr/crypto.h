@@ -705,6 +705,7 @@ WINPR_API BOOL winpr_MD4(const BYTE* input, size_t ilen, BYTE* output, size_t ol
  */
 
 #define WINPR_SHA1_DIGEST_LENGTH	20
+#define WINPR_SHA256_DIGEST_LENGTH     32
 
 struct _OPENSSL_SHA1_CTX
 {
@@ -846,11 +847,12 @@ typedef union _WINPR_DIGEST_CTX WINPR_DIGEST_CTX;
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+WINPR_API WINPR_DIGEST_CTX* winpr_Digest_New(void);
 WINPR_API BOOL winpr_Digest_Init(WINPR_DIGEST_CTX* ctx, WINPR_MD_TYPE md);
 WINPR_API BOOL winpr_Digest_Update(WINPR_DIGEST_CTX* ctx, const BYTE* input, size_t ilen);
 WINPR_API BOOL winpr_Digest_Final(WINPR_DIGEST_CTX* ctx, BYTE* output, size_t ilen);
 WINPR_API BOOL winpr_Digest(int md, const BYTE* input, size_t ilen, BYTE* output, size_t olen);
+WINPR_API void winpr_Digest_Free(WINPR_DIGEST_CTX* ctx);
 
 #ifdef __cplusplus
 }

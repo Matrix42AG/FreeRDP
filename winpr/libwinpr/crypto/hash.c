@@ -448,6 +448,55 @@ BOOL winpr_Digest_Update(WINPR_DIGEST_CTX* ctx, const BYTE* input, size_t ilen)
 	return TRUE;
 }
 
+void winpr_Digest_Free(WINPR_DIGEST_CTX* ctx)
+{
+#if defined(WITH_OPENSSL)
+	EVP_MD_CTX* mdctx = (EVP_MD_CTX*) ctx;
+
+	if (mdctx)
+	{
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+		EVP_MD_CTX_destroy(mdctx);
+#else
+		EVP_MD_CTX_free(mdctx);
+#endif
+	}
+
+#elif defined(WITH_MBEDTLS)
+	mbedtls_md_context_t* mdctx = (mbedtls_md_context_t*) ctx;
+
+	if (mdctx)
+	{
+		mbedtls_md_free(mdctx);
+		free(mdctx);
+	}
+
+#endif
+}
+
+WINPR_DIGEST_CTX* winpr_Digest_New(void)
+{
+	WINPR_DIGEST_CTX* ctx = NULL;
+#if defined(WITH_OPENSSL)
+	EVP_MD_CTX* mdctx;
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+	mdctx = EVP_MD_CTX_create();
+#else
+	mdctx = EVP_MD_CTX_new();
+#endif
+	ctx = (WINPR_DIGEST_CTX*) mdctx;
+#elif defined(WITH_MBEDTLS)
+	mbedtls_md_context_t* mdctx;
+	mdctx = (mbedtls_md_context_t*) calloc(1, sizeof(mbedtls_md_context_t));
+
+	if (mdctx)
+		mbedtls_md_init(mdctx);
+
+	ctx = (WINPR_DIGEST_CTX*) mdctx;
+#endif
+	return ctx;
+}
+
 BOOL winpr_Digest_Final(WINPR_DIGEST_CTX* ctx, BYTE* output, size_t olen)
 {
 	// TODO: output length check
